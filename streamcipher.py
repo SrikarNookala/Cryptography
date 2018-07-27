@@ -9,12 +9,6 @@ https://www.coursera.org/learn/crypto/quiz/KZ9js/week-1-programming-assignment-o
 
 
 """
-
-
-
-myArray = "\0" * 1024
-li = list(myArray)
-
 def strxor(a, b): 
     if len(a) > len(b):
        return "".join([chr(ord(x) ^ ord(y)) for (x, y) in zip(a[:len(b)], b)])
@@ -22,26 +16,6 @@ def strxor(a, b):
        return "".join([chr(ord(x) ^ ord(y)) for (x, y) in zip(a, b[:len(a)])])
 
 
-
-def evaluate(p,q):
-    m = strxor(p.decode('hex'),q.decode('hex'));
-    for i in range(0, len(m)):
-        if m[i].isalpha():
-            g = ""+(q[2*i])+(q[2*i+1]);
-            h = ""+(p[2*i])+(p[2*i+1]);
-            k = strxor(g.decode('hex'),"20".decode('hex'));
-            o = strxor(h.decode('hex'),"20".decode('hex'));
-            if k.isalpha():
-                #print i,m[i],g,h,k,o
-                li[i]=k
-                
-            if o.isalpha():
-                #print i,m[i],g,h,k,o
-                li[i]=o
-
-
-
-print("Hello World")
 crip = ['315c4eeaa8b5f8aaf9174145bf43e1784b8fa00dc71d885a804e5ee9fa40b16349c146fb778cdf2d3aff021dfff5b403b510d0d0455468aeb98622b137dae857553ccd8883a7bc37520e06e515d22c954eba5025b8cc57ee59418ce7dc6bc41556bdb36bbca3e8774301fbcaa3b83b220809560987815f65286764703de0f3d524400a19b159610b11ef3e',
         '234c02ecbbfbafa3ed18510abd11fa724fcda2018a1a8342cf064bbde548b12b07df44ba7191d9606ef4081ffde5ad46a5069d9f7f543bedb9c861bf29c7e205132eda9382b0bc2c5c4b45f919cf3a9f1cb74151f6d551f4480c82b2cb24cc5b028aa76eb7b4ab24171ab3cdadb8356f',
         '32510ba9a7b2bba9b8005d43a304b5714cc0bb0c8a34884dd91304b8ad40b62b07df44ba6e9d8a2368e51d04e0e7b207b70b9b8261112bacb6c866a232dfe257527dc29398f5f3251a0d47e503c66e935de81230b59b7afb5f41afa8d661cb',
@@ -53,12 +27,30 @@ crip = ['315c4eeaa8b5f8aaf9174145bf43e1784b8fa00dc71d885a804e5ee9fa40b16349c146f
         '271946f9bbb2aeadec111841a81abc300ecaa01bd8069d5cc91005e9fe4aad6e04d513e96d99de2569bc5e50eeeca709b50a8a987f4264edb6896fb537d0a716132ddc938fb0f836480e06ed0fcd6e9759f40462f9cf57f4564186a2c1778f1543efa270bda5e933421cbe88a4a52222190f471e9bd15f652b653b7071aec59a2705081ffe72651d08f822c9ed6d76e48b63ab15d0208573a7eef027',
         '466d06ece998b7a2fb1d464fed2ced7641ddaa3cc31c9941cf110abbf409ed39598005b3399ccfafb61d0315fca0a314be138a9f32503bedac8067f03adbf3575c3b8edc9ba7f537530541ab0f9f3cd04ff50d66f1d559ba520e89a2cb2a83']
 
-for i in range(0,len(crip)-1):
-    for j in range(i+1,len(crip)):
-        evaluate(crip[i],crip[j])
+myArray = "\0" * 1024
+li = list(myArray)
+		
+for i in range(len(crip)):
+	current = crip[i].decode('hex')
+	space = [0]*len(current)
+	
+	for j in range(len(crip)):
+	
+	    if i==j: continue;
+		
+	    c = strxor(current,crip[j].decode('hex'))
+		
+	    for k in range(len(c)):
+			    if c[k].isalpha():
+				    space[k]=space[k]+1
+		
+	for m in range(len(space)):
+		if space[m]>5:
+			li[m]=strxor(crip[i].decode('hex')[m],' ')
         
 
 
-print("".join(li))
-   
+print(strxor("".join(li),'32510ba9babebbbefd001547a810e67149caee11d945cd7fc81a05e9f85aac650e9052ba6a8cd8257bf14d13e6f0a803b54fde9e77472dbff89d71b57bddef121336cb85ccb8f3315f4b52e301d16e9f52f904'.decode('hex')))
 
+#for d in crip:
+	#print(strxor("".join(li),d.decode('hex')))
